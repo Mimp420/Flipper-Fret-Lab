@@ -1,0 +1,28 @@
+name: Build FretLab
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build FretLab with uFBT
+        uses: flipperdevices/flipperzero-ufbt-action@v0.1
+        id: build-app
+        with:
+          sdk-channel: release
+
+      - name: Upload FretLab FAP
+        uses: actions/upload-artifact@v4
+        with:
+          name: FretLab
+          path: ${{ steps.build-app.outputs.fap-artifacts }}
